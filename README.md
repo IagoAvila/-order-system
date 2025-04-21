@@ -1,67 +1,105 @@
-# Sistema de Gestão de Pedidos
 
-Este projeto é um Sistema de Gestão de Pedidos (Order Management System) desenvolvido com **C# (.NET 7)** para o backend e **React + TailwindCSS** para o frontend. O sistema permite criar, listar e visualizar pedidos, e comunica-se com o **Azure Service Bus** para simular um processamento assíncrono de pedidos.
+# Order Management System
+
+Este é um sistema simples de gestão de pedidos (Order Management System), onde é possível criar, listar e visualizar pedidos. Ao criar um pedido, uma mensagem é enviada para o Azure Service Bus, simulando um processamento assíncrono.
 
 ## Tecnologias Utilizadas
 
 - **Backend**: C# (.NET 7 ou superior), Entity Framework, PostgreSQL
 - **Frontend**: React, TailwindCSS
 - **Mensageria**: Azure Service Bus
-- **Infraestrutura**: Docker (opcional)
-
-## Requisitos
-
-### 1️⃣ Backend (API em C#)
-
-A API possui os seguintes endpoints:
-
-- `POST /orders`: Criar um pedido
-- `GET /orders`: Listar todos os pedidos
-- `GET /orders/{id}`: Obter detalhes de um pedido
-
-### 2️⃣ Frontend (React + TailwindCSS)
-
-A interface do sistema possui as seguintes funcionalidades:
-
-- Listagem de pedidos em uma tabela responsiva.
-- Formulário para criação de pedidos.
-- Detalhamento de cada pedido ao clicar em um item da lista.
-
-### 3️⃣ Mensageria (Azure Service Bus)
-
-Ao criar um pedido, a API envia um evento para o **Azure Service Bus**, simulando um processamento assíncrono. Um worker (serviço em segundo plano) consome essas mensagens e atualiza o status do pedido para "Processando" e, após 5 segundos, para "Finalizado".
-
-### 4️⃣ Docker (Opcional)
-
-Para facilitar a inicialização do ambiente, você pode utilizar o **Docker**. O `docker-compose.yml` está configurado para rodar o backend e o banco de dados PostgreSQL.
-
----
 
 ## Funcionalidades
 
-### Criar Pedido
+- **Backend**:
+  - Criar, listar e visualizar pedidos via API REST.
+  - Cada pedido possui: Id (Guid), Cliente, Produto, Valor, Status e Data de Criação.
+  - Envia evento para o Azure Service Bus quando um pedido é criado.
+  - Worker (background service) que consome as mensagens do Azure Service Bus, alterando o status do pedido para "Processando" e, após 5 segundos, para "Finalizado".
 
-Ao clicar no botão **Criar Pedido**, o sistema cria um novo pedido e envia uma mensagem para o Azure Service Bus. O pedido é armazenado no banco de dados PostgreSQL.
+- **Frontend**:
+  - Lista de pedidos em uma tabela responsiva.
+  - Formulário para criação de pedidos.
+  - Visualização de detalhes do pedido ao clicar nele.
 
-### Listar Pedidos
+## Passos para Executar o Projeto
 
-Os pedidos são exibidos em uma tabela no frontend, com informações sobre o **cliente**, **produto**, **valor** e **status**.
+### 1. Backend
 
-### Detalhes do Pedido
+#### 1.1 Clonar o Repositório
 
-Ao clicar em um pedido na lista, o usuário pode visualizar mais detalhes sobre o pedido.
+Clone o repositório para o seu ambiente de desenvolvimento:
+```bash
+git clone https://github.com/IagoAvila/-order-system.git
+cd order-system
+```
 
-### Status de Pedido
+#### 1.2 Configurar o Banco de Dados PostgreSQL
 
-O status do pedido é atualizado dinamicamente para "Pendente", "Processando" e "Finalizado" através de uma simulação assíncrona com o Azure Service Bus.
+Certifique-se de que o **PostgreSQL** está instalado e rodando na sua máquina ou em um serviço de nuvem.
 
----
+No arquivo `appsettings.json`, atualize as configurações de conexão com o seu banco de dados PostgreSQL, caso necessário. Um exemplo de configuração seria:
 
-## Como Rodar o Projeto
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Username=postgres;Password=password;Database=OrderManagementDb"
+  }
+}
+```
 
-### Backend
+#### 1.3 Aplicar as Migrações do Entity Framework
 
-1. **Clonar o repositório**:
-   ```bash
-   git clone https://github.com/IagoAvila/-order-system.git
-   cd order-system
+Se for a primeira vez que você está rodando o backend, execute as migrações para criar o banco de dados:
+```bash
+dotnet ef database update
+```
+
+#### 1.4 Rodar o Backend
+
+Após configurar o banco de dados, rode o projeto com o comando:
+```bash
+dotnet run
+```
+O backend estará disponível em `http://localhost:5000`.
+
+### 2. Frontend
+
+#### 2.1 Clonar o Repositório do Frontend
+
+Acesse a pasta do frontend do repositório clonado:
+```bash
+cd frontend
+```
+
+#### 2.2 Instalar as Dependências
+
+Instale as dependências do projeto com o npm:
+```bash
+npm install
+```
+
+#### 2.3 Rodar o Frontend
+
+Execute o frontend no modo de desenvolvimento:
+```bash
+npm run dev
+```
+
+O **frontend** estará disponível em `http://localhost:3000`.
+
+### 3. Estrutura do Projeto
+
+#### 3.1 Backend
+
+- **Controllers**: Implementação da API REST para gerenciamento de pedidos.
+- **Models**: Estrutura do pedido, incluindo os atributos necessários.
+- **Services**: Lógica de negócios, incluindo o envio de mensagens para o Azure Service Bus.
+- **Workers**: Worker para consumir as mensagens do Azure Service Bus e atualizar o status do pedido.
+
+#### 3.2 Frontend
+
+- **Pages**: Contém as páginas principais, como a tela de pedidos.
+- **Components**: Componentes reutilizáveis, como botões e formulários.
+- **Services**: Funções que lidam com a comunicação com a API do backend.
+
