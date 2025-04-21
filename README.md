@@ -3,6 +3,18 @@
 
 Este é um sistema simples de gestão de pedidos (Order Management System), onde é possível criar, listar e visualizar pedidos. Ao criar um pedido, uma mensagem é enviada para o Azure Service Bus, simulando um processamento assíncrono.
 
+## Descrição do Projeto
+
+Este projeto é um **Sistema de Gestão de Pedidos (Order Management System)**, desenvolvido com o objetivo de criar, listar e visualizar pedidos de forma simples e eficiente. Cada pedido possui atributos como cliente, produto, valor, status e data de criação, sendo que o status pode variar entre "Pendente", "Processando" e "Finalizado".
+
+### Funcionalidades:
+- **Criação de Pedidos**: O usuário pode criar novos pedidos, que são salvos no banco de dados PostgreSQL e enviados para o Azure Service Bus.
+- **Listagem de Pedidos**: Todos os pedidos criados podem ser visualizados em uma lista com seus respectivos detalhes.
+- **Detalhamento de Pedidos**: É possível visualizar os detalhes completos de cada pedido, clicando sobre o item na lista.
+- **Processamento Assíncrono**: Ao criar um pedido, um evento é enviado para o Azure Service Bus, simulando o processamento assíncrono do pedido. Um worker no backend atualiza o status do pedido, alterando-o de "Pendente" para "Processando" e, após 5 segundos, para "Finalizado".
+
+Este projeto utiliza tecnologias como **C# (.NET 7)**, **Entity Framework**, **PostgreSQL**, **React**, **TailwindCSS** e **Azure Service Bus**.
+
 ## Tecnologias Utilizadas
 
 - **Backend**: C# (.NET 7 ou superior), Entity Framework, PostgreSQL
