@@ -1,0 +1,12 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* index.css ou App.css */
+#root > div > h1 {
+    display: none;
+}
+
+#root > div > button {
+    display: none;
+}
